@@ -7,7 +7,7 @@ use Symfony\Component\Yaml\Yaml;
 class ChecksumController
 {
 
-    CONST CHECKSUM_FILE_PATH = '/../Resources/checksum/checksum.yml';
+    CONST CHECKSUM_FILE_PATH = '/Resources/checksum/checksum.yml';
 
     protected $checksumArray = [];
     protected $loaded = false;
@@ -71,7 +71,7 @@ class ChecksumController
 
     protected function readYml()
     {
-        $this->checksumArray = Yaml::parse(file_get_contents(__DIR__ . self::CHECKSUM_FILE_PATH));
+        $this->checksumArray = Yaml::parse(file_get_contents($this->kernelRootDir . self::CHECKSUM_FILE_PATH));
         if (!is_array($this->checksumArray)) {
             $this->checksumArray = [];
         }
@@ -80,7 +80,7 @@ class ChecksumController
     protected function dumpYml()
     {
         $yaml = Yaml::dump($this->checksumArray, 5);
-        file_put_contents(__DIR__ . self::CHECKSUM_FILE_PATH, $yaml);
+        file_put_contents($this->kernelRootDir. self::CHECKSUM_FILE_PATH, $yaml);
     }
 
 }

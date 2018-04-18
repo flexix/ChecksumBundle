@@ -29,21 +29,42 @@ class ChecksumController
         $this->dumpYml();}
     }
 
-    public function checkChecksum($filePath)
+    public function checkChecksum($filePath,$content)
     {
         if(file_exists($filePath)){
+        
         $checksum = sha1_file($filePath);
-        $filePath=$this->removeFilePrefix($filePath);
+        
+        $partOfFilePath=$this->removeFilePrefix($filePath);
         $this->loadChecksumArray();
-        $filePath = $this->changeSlashes($filePath);
-        if (array_key_exists($filePath, $this->checksumArray)) {
+        $partOfFilePath = $this->changeSlashes($partOfFilePath);
+        
+        if (array_key_exists($partOfFilePath, $this->checksumArray)) {
 
-            if ($this->checksumArray[$filePath] == $checksum) {
+            if ($this->checksumArray[$partOfFilePath] == $checksum) {
                 return true;
             } else {
                 return false;
             }
-        }}
+        }
+        else
+        {
+            $fileContentChecksum=sha1(file_get_contents($filePath));
+            $contentChecksum= sha1($content);
+         
+            if($fileContentChecksum==$contentChecksum)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
+        
+        
+            }
 
         return true;
     }
